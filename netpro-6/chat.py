@@ -100,7 +100,6 @@ class Chat:
 
         return {'status': 'OK', 'tokenid': tokenid}
 
-
     def register_user(self, username, nama, negara, password, realm):
         if username in self.users:
             return {'status': 'ERROR', 'message': 'User Sudah Ada'}
@@ -161,32 +160,52 @@ class Chat:
 
     def create_group(self, sessionid, groupname):
         if sessionid not in self.sessions:
-            return {'status': 'ERROR', 'message': 'Session Tidak Ditemukan'}
+            return {
+                'status': 'ERROR',
+                'message': 'Session Tidak Ditemukan'}
         if groupname in self.groups:
-            return {'status': 'ERROR', 'message': 'Group Sudah Ada'}
+            return {
+                'status': 'ERROR',
+                'message': 'Group Sudah Ada'}
         self.groups[groupname] = {'members': []}
-        return {'status': 'OK', 'message': f'Group {groupname} created'}
+        return {
+            'status': 'OK',
+            'message': f'Group {groupname} created'}
 
     def join_group(self, sessionid, groupname):
         if sessionid not in self.sessions:
-            return {'status': 'ERROR', 'message': 'Session Tidak Ditemukan'}
+            return {
+                'status': 'ERROR',
+                'message': 'Session Tidak Ditemukan'}
         if groupname not in self.groups:
-            return {'status': 'ERROR', 'message': 'Group Tidak Ditemukan'}
+            return {
+                'status': 'ERROR',
+                'message': 'Group Tidak Ditemukan'}
         username = self.sessions[sessionid]['username']
         if username in self.groups[groupname]['members']:
-            return {'status': 'ERROR', 'message': 'Sudah menjadi anggota grup ini'}
+            return {
+                'status': 'ERROR',
+                'message': 'Sudah menjadi anggota grup ini'}
         self.groups[groupname]['members'].append(username)
-        return {'status': 'OK', 'message': f'Bergabung ke grup {groupname}'}
+        return {
+            'status': 'OK',
+            'message': f'Bergabung ke grup {groupname}'}
 
     def send_group_message(self, sessionid, username_from, groupname, message):
         if sessionid not in self.sessions:
-            return {'status': 'ERROR', 'message': 'Session Tidak Ditemukan'}
+            return {
+                'status': 'ERROR',
+                'message': 'Session Tidak Ditemukan'}
         if groupname not in self.groups:
-            return {'status': 'ERROR', 'message': 'Group Tidak Ditemukan'}
+            return {
+                'status': 'ERROR',
+                'message': 'Group Tidak Ditemukan'}
 
         s_fr = self.get_user(username_from)
         if not s_fr:
-            return {'status': 'ERROR', 'message': 'User Tidak Ditemukan'}
+            return {
+                'status': 'ERROR',
+                'message': 'User Tidak Ditemukan'}
 
         message = {'msg_from': s_fr['nama'], 'msg_to': groupname, 'msg': message}
         members = self.groups[groupname]['members']
